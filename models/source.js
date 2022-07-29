@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const SourceSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 30 },
-  description: { type: string },
+  description: { type: String },
 });
 
 SourceSchema.virtual('url').get(function () {
