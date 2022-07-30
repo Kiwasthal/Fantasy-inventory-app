@@ -1,5 +1,9 @@
 const Creature = require('../models/creature');
 
+exports.index = (req, res, next) => {
+  res.send('Not imlemented : Site Home page');
+};
+
 exports.creature_list = (req, res, next) => {
   res.send('Not implemented : Creature list');
 };
