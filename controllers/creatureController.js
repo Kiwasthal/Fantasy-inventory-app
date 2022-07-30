@@ -1,7 +1,7 @@
 const Creature = require('../models/creature');
 
 exports.index = (req, res, next) => {
-  res.send('Not imlemented : Site Home page');
+  res.render('index', { title: 'Home' });
 };
 
 exports.creature_list = (req, res, next) => {

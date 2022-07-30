@@ -1,4 +1,14 @@
 const CreatureInstance = require('../models/creatureinstance');
+const multer = require('multer');
+const { storage, checkFileType } = require('../utils/multer');
+
+//Init upload
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single('myImage'); //input name! add enctype 'mutipart/form-data' to my form in view
 
 exports.creatureinstance_list = (req, res, next) => {
   res.send('Not implemented : Creatureinstance list');
