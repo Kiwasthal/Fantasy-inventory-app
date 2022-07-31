@@ -3,18 +3,61 @@
   <head>
     <%-include('./partial/head.ejs') %>
   </head>
-  <body>
+  <body class="lg:overflow-hidden">
     <%-include('./partial/navbar.ejs') %>
     <div class="flex">
       <%-include('./partial/sidenav.ejs') %>
-      <div class="grid grid-cols-3 grid-rows-5 w-screen justify-items-center">
-        <div class="col-span-3">
-          <h1 class="font-main pt-5 text-4xl text-center"><%= title %></h1>
+      <div class="grid grid-cols-3  grid-rows-2 flex-1">
+        <div class="col-span-3 flex flex-col items-center w-full">
+          <h1 class="font-main pt-5 text-4xl underline"><%= title %></h1>
           <span class="font-secondary">Inventory of fantastical beings</span>
+          <span class="mt-12 font-main">Website's Statistics</span>
         </div>
-
-        <div class=""></div>
+        <div class="col-span-3 flex md:justify-between md:row-span-1 flex-wrap justify-center">
+          <div class="stat-card lg:ml-5">
+            <h1 class="font-main p-3 pb-0"">Creatures</h1>
+            <span class="flex-1 flex items-center text-3xl font-main"
+            ><%= data.creatureCount %> </span>
+          </div>
+          <div class="stat-card">
+            <h1 class="font-main p-3 pb-0 ">Sources</h1>
+            <hr />
+            <span class="flex-1 flex items-center text-3xl font-main"
+              ><%= data.sourceCount %>
+            </span>
+          </div>
+          <div class="stat-card">
+            <h1 class="font-main p-3 pb-0"">Types</h1>
+            <span class="flex-1 flex items-center text-3xl font-main"
+            ><%= data.typeCount %> </span>
+          </div>
+          <div class="stat-card lg:mr-6">
+            <h1 class="font-main p-3 pb-0"">Instances</h1>
+            <span class="flex-1 flex items-center text-3xl font-main"
+            ><%= data.creatureInstanceCount %> </span>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="grid lg:grid-cols-3">
+      <% if (data.display.length > 0) { %>
+        <% data.display.forEach( item => { %>
+          <div class="bg-white rounded overflow-hidden shadow-md relative hover:shadow-lg m-5 mt-0">
+            <div class="flex justify-between items-end" >
+              <span class="font-bold font-secondary text-xl "><%= item.name %> </span>
+              
+              <span class=" font-secondary text-sm "><%= item.source[0].name %> - <%= item.type.name %>  </span>
+            </div>
+            <img
+                src=""
+                class="w-full h-32 sm:h-48 object-cover"
+              />
+              <a href="/archieve/creature/<%=item._id%>">
+              <button class="absolute bottom-0 right-0 mr-2 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide">View</button>
+            </a>
+          </div>
+       <% }) %> 
+     <% } %> 
     </div>
   </body>
 </html>

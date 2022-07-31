@@ -16,7 +16,7 @@ const CreatureSchema = new Schema({
 });
 
 CreatureSchema.virtual('url').get(function () {
-  return '/list/creature/' + this._id;
+  return '/archieve/creature/' + this._id;
 });
 
 module.exports = mongoose.model('Creature', CreatureSchema);

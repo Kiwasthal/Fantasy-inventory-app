@@ -155,8 +155,8 @@ function createCreatures(cb) {
           'Cyclopes',
           'In Greek mythology and later Roman mythology, the Cyclopes  Greek: Κύκλωπες, Kýklōpes, "Circle-eyes" or "Round-eyes" singular Cyclops Κύκλωψ, Kýklōps) are giant one-eyed creatures. Three groups of Cyclopes can be distinguished. In Hesiod\'s Theogony, the Cyclopes are the three brothers Brontes, Steropes, and Arges, who made for Zeus his weapon the thunderbolt. In Homer\'s Odyssey, they are an uncivilized group of shepherds, the brethren of Polyphemus encountered by Odysseus. Cyclopes were also famous as the builders of the Cyclopean walls of Mycenae and Tiryns.',
           'Huge',
-          sources[0],
-          [types[0]],
+          types[0],
+          [sources[0]],
           callback
         );
       },
@@ -165,8 +165,8 @@ function createCreatures(cb) {
           'Jotunn',
           'A jötunn (in the normalised scholarly spelling of Old Norse, jǫtunn) or, in Old English, eoten (plural eotenas) is a type of supernatural being in Germanic mythology. In Norse mythology, they are often contrasted with gods (Æsir and Vanir) and other non-human figures, such as dwarfs and elves, although the groupings are not always mutually exclusive. The entities themselves are referred to by several other terms, including risi, þurs (or thurs) and troll if male and gýgr or tröllkona if female. The jötnar typically dwell across boundaries from the gods and humans in lands such as Jötunheimr.',
           'Huge',
-          sources[2],
-          [types[0]],
+          types[0],
+          [sources[2]],
           callback
         );
       },
@@ -175,8 +175,8 @@ function createCreatures(cb) {
           'Banshee',
           'A banshee ,("woman of the fairy mound" or "fairy woman") is a female spirit in Irish folklore who heralds the death of a family member, usually by wailing, shrieking, or keening. Her name is connected to the mythologically important tumuli or "mounds" that dot the Irish countryside, which are known as síde (singular síd) in Old Irish',
           'Medium',
-          sources[1],
-          [types[2]],
+          types[2],
+          [sources[1]],
           callback
         );
       },
@@ -185,8 +185,8 @@ function createCreatures(cb) {
           'Kraken',
           'Originating in Scandinavian folklore, the kraken is usually depicted as an aggressive cephalopod-like creature capable of destroying entire ships and dragging sailors to their doom.',
           'Gargantuan',
-          sources[2],
-          [types[1]],
+          types[1],
+          [sources[2]],
           callback
         );
       },
