@@ -1,7 +1,15 @@
 const Type = require('../models/type');
 
 exports.type_list = (req, res, next) => {
-  res.send('Not implemented : Type_list');
+  Type.find({}, 'name')
+    .sort({ name: 1 })
+    .exec((err, types_list) => {
+      if (err) next(err);
+      res.render('type_list', {
+        title: 'Types',
+        types_list,
+      });
+    });
 };
 
 exports.type_detail = (req, res, next) => {

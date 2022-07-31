@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%-include('./partial/head.ejs') %>
+  </head>
+  <body>
+    <%-include('./partial/navbar.ejs') %>
+    <div class="flex">
+      <%-include('./partial/sidenav.ejs') %>
+      <main class="px-16 py-6 flex-1">
+        <header>
+          <h2 class="text-gray-700 text-5xl font-semibold font-main">
+            <%= title %>
+          </h2>
+          <h3 class="text-2xl font-semibold font-secondary">
+            Browse all creature types
+          </h3>
+          <div class="mt-8 grid lg:grid-cols-3 gap-10">
+            <% if (types_list.length > 0) { %> <% types_list.forEach( (type) =>
+            { %>
+            <div class="card hover:shadow-lg">
+              <div class="m-4 mb-1 flex justify-center items-end">
+                <span class="text-lg tracking-wide font-bold font-main"
+                  ><%= type.name %></span
+                >
+              </div>
+              <img src="" class="w-full h-22 sm:h-48 object-cover" />
+              <a href="<%=type.url%>">
+                <button
+                  class="absolute bottom-0 right-0 mr-3 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide"
+                >
+                  View
+                </button>
+              </a>
+            </div>
+            <% } ) %> <%} %>
+          </div>
+        </header>
+      </main>
+    </div>
+  </body>
+</html>
