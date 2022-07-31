@@ -1,7 +1,15 @@
 const Source = require('../models/source');
 
 exports.source_list = (req, res, next) => {
-  res.send('Not implemented : Source list');
+  Source.find({}, 'name')
+    .sort({ name: 1 })
+    .exec((err, sources_list) => {
+      if (err) next(err);
+      res.render('source_list', {
+        title: 'Sources',
+        sources_list,
+      });
+    });
 };
 
 exports.source_detail = (req, res, next) => {

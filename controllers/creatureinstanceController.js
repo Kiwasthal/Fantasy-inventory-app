@@ -11,7 +11,15 @@ const upload = multer({
 }).single('myImage'); //input name! add enctype 'mutipart/form-data' to my form in view
 
 exports.creatureinstance_list = (req, res, next) => {
-  res.send('Not implemented : Creatureinstance list');
+  CreatureInstance.find()
+    .populate('creature')
+    .exec((err, creatureintances_list) => {
+      if (err) next(err);
+      res.render('creatureinstance_list', {
+        title: 'Creature Instances',
+        creatureintances_list,
+      });
+    });
 };
 
 exports.creatureinstance_detail = (req, res, next) => {
