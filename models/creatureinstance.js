@@ -9,7 +9,7 @@ const CreatureInstanceSchema = new Schema({
 });
 
 CreatureInstanceSchema.virtual('url').get(function () {
-  return '/list/creatureinstance/' + this._id;
+  return '/archieve/creatureinstance/' + this._id;
 });
 
 module.exports = mongoose.model('Creatureinstance', CreatureInstanceSchema);

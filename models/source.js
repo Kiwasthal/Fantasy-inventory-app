@@ -8,7 +8,7 @@ const SourceSchema = new Schema({
 });
 
 SourceSchema.virtual('url').get(function () {
-  return '/list/source/' + this.id;
+  return '/archieve/source/' + this.id;
 });
 
 module.exports = mongoose.model('Source', SourceSchema);

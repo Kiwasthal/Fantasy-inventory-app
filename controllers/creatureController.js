@@ -20,9 +20,6 @@ exports.index = (req, res, next) => {
       sourceCount(callback) {
         Source.countDocuments({}, callback);
       },
-      randomDisplay(callback) {
-        Creature.aggregate([{ $sample: { size: 3 } }]).exec(callback);
-      },
       display(callback) {
         async.waterfall(
           [
@@ -51,7 +48,13 @@ exports.index = (req, res, next) => {
 };
 
 exports.creature_list = (req, res, next) => {
-  res.send('Not implemented : Creature list');
+  Creature.find({}, 'name type source')
+    .sort({ name: 1 })
+    .populate('type')
+    .populate('source')
+    .exec((err, creature_list) => {
+      res.render('creature_list', { title: 'Creature List', creature_list });
+    });
 };
 
 exports.creature_detail = (req, res, next) => {

@@ -8,3 +8,7 @@
 .stat-card {
   @apply bg-white rounded overflow-hidden shadow-md border-2 border-gray-100 flex flex-col items-center w-60;
 }
+
+.card {
+  @apply bg-white rounded overflow-hidden shadow-md relative;
+}
