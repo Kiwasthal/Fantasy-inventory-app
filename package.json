@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
     "serverstart": "DEBUG=express-locallibrary-tutorial:* npm run devstart",
-    "tailwindwatch": "npx tailwindcss -i ./input.css -o ./public./stylesheets/output.css --watch"
+    "tailwindwatch": "npx tailwindcss -i ./input.css -o ./public/stylesheets/output.css --watch"
   },
   "dependencies": {
     "async": "^3.2.4",

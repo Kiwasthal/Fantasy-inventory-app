@@ -4,6 +4,17 @@
     <%-include('./partial/head.ejs') %>
   </head>
   <body>
-    <%-include('./partial/sidenav.ejs') %>
+    <%-include('./partial/navbar.ejs') %>
+    <div class="flex">
+      <%-include('./partial/sidenav.ejs') %>
+      <div class="grid grid-cols-3 grid-rows-5 w-screen justify-items-center">
+        <div class="col-span-3">
+          <h1 class="font-main pt-5 text-4xl text-center"><%= title %></h1>
+          <span class="font-secondary">Inventory of fantastical beings</span>
+        </div>
+
+        <div class=""></div>
+      </div>
+    </div>
   </body>
 </html>
