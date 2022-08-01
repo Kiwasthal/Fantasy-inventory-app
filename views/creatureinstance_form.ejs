@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%-include('./partial/head.ejs') %>
+  </head>
+  <body>
+    <%-include('./partial/navbar.ejs') %>
+    <div class="flex">
+      <%-include('./partial/sidenav.ejs') %>
+      <main class="m-10">
+        <header>
+          <h2 class="text-gray-700 text-5xl font-semibold font-main">
+            <%= title %>
+          </h2>
+        </header>
+        <form class="w-full max-w-xl mt-6" method="post" action="" enctype="multipart/form-data">
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="name"
+              >
+                Creature Instance Name
+              </label>
+              <input
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Polyphemus"
+                value="<%= (typeof creatureinstance === 'undefined') ? "" : creatureinstance.name %>"
+              />
+            </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="image"
+              >
+                Creature Instance Image
+              </label>
+              <input
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="image"
+                name="image"
+                type="file"
+              />
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="history"
+              >
+                History
+              </label>
+              <textarea
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                rows="7"
+                id="history"
+                name="history"
+                type="text"
+                placeholder="Polyphemus is the one-eyed giant son of Poseidon and Thoosa in Greek mythology, one of the Cyclopes described in Homer's Odyssey. His name means 'abounding in songs and legends'.Polyphemus first appeared as a savage man-eating giant in the ninth book of the Odyssey. The satyr play of Euripides is dependent on this episode apart from one detail; for comic effect, Polyphemus is made a pederast in the play. Later Classical writers presented him in their poems as heterosexual and linked his name with the nymph Galatea. Often he was portrayed as unsuccessful in these, and as unaware of his disproportionate size and musical failings.[2] In the work of even later authors, however, he is presented as both a successful lover and skilled musician. From the Renaissance on, art and literature reflect all of these interpretations of the giant"
+              ><%= (typeof creatureinstance === 'undefined') ? "" : creatureinstance.history %></textarea>
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-3 mb-2">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="source"
+              >
+                Creature Instance Family
+              </label>
+              <div class="relative">
+                <select
+                  class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="creature" name="creature"
+                >
+                  <% creatures_list.sort((a,b) => { let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase(); return (textA > textB) ? 1 :
+                  0 }) %> <% creatures_list.forEach((creature) => { %> 
+                    <% if (typeof creatureinstance === "undefined") { %>
+                      <option value="<%= creature._id %>"><%= creature.name %></option> 
+                    <% } else { %>
+                      <option value="<%= creature._id %>" <%= (creature._id.toString() === creatureinstance.creature._id.toString() ) ? "selected" : "" %>><%= creature.name %></option>
+                    <% } %>  
+                  <% }) %>
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    class="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            class="mt-6 bg-gray-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+        <ul>
+          <% if (typeof errors !== "undefined" && errors.length > 0) { %> <%
+          errors.forEach((error, index) => { %>
+          <li><%= error.msg %></li>
+          <% }) %> <% } %>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>
