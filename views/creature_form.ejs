@@ -13,7 +13,7 @@
             <%= title %>
           </h2>
         </header>
-        <form class="w-full max-w-xl mt-6" method="post" action="">
+        <form class="w-full max-w-xl mt-6" method="post" action="" enctype="multipart/form-data">
           <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
@@ -61,7 +61,7 @@
                 name="history"
                 type="text"
                 placeholder="The Loch Ness Monster, affectionately known as Nessie, is a creature in Scottish folklore that is said to inhabit Loch Ness in the Scottish Highlands. It is often described as large, long-necked, and with one or more humps protruding from the water. Popular interest and belief in the creature has varied since it was brought to worldwide attention in 1933. Evidence of its existence is anecdotal, with a number of disputed photographs and sonar readings."
-              ></textarea>
+              ><%= (typeof creature === 'undefined') ? "" : creature.history %></textarea>
             </div>
           </div>
           <div class="flex flex-wrap -mx-3 mb-2">
@@ -83,7 +83,7 @@
                     <% if (typeof creature === "undefined") { %>
                       <option value="<%= source._id %>"><%= source.name %></option> 
                     <% } else { %>
-                      <option value="<%= source._id %>" selected="<%= (source._id.toString() === creature.source._id.toString()) ? "selected" : "" %>"><%= source.name %></option>
+                      <option value="<%= source._id %>" <%= (source._id.toString() === creature.source[0]._id.toString() ) ? "selected" : "" %>><%= source.name %></option>
                     <% } %>  
                   <% }) %>
                 </select>
@@ -181,6 +181,12 @@
             Submit
           </button>
         </form>
+        <ul>
+          <% if (typeof errors !== "undefined" && errors.length > 0) { %> <%
+          errors.forEach((error, index) => { %>
+          <li><%= error.msg %></li>
+          <% }) %> <% } %>
+        </ul>
       </main>
     </div>
   </body>

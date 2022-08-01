@@ -8,7 +8,7 @@ const { body, checkSchema, validationResult } = require('express-validator');
 const async = require('async');
 //Init upload
 const upload = multer({
-  storage,
+  storage: storage,
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
@@ -57,7 +57,7 @@ exports.index = (req, res, next) => {
 };
 
 exports.creature_list = (req, res, next) => {
-  Creature.find({}, 'name type source')
+  Creature.find({}, 'name type source filepath')
     .sort({ name: 1 })
     .populate('type')
     .populate('source')
@@ -126,10 +126,8 @@ exports.creature_create_post = [
   checkSchema({
     image: {
       custom: {
-        options: function ({ req }) {
-          return !!req.file;
-        },
-        errorMessage: 'Please upload a creature image',
+        options: (value, { req }) => !!req.file,
+        errorMessage: 'You need to upload a creature image (jpg, png, gif)',
       },
     },
   }),

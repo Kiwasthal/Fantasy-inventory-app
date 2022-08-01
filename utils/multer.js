@@ -1,8 +1,8 @@
 const multer = require('multer');
 const path = require('path');
 
-const storage = multer.diskStorage({
-  destination: '../public/uploads/',
+const creaturestorage = multer.diskStorage({
+  destination: './public/uploads/creatures/',
   filename: function (req, file, cb) {
     cb(
       null,
@@ -23,4 +23,4 @@ const checkFileType = (file, cb) => {
   else cb('You can only upload images');
 };
 
-module.exports = { storage, checkFileType };
+module.exports = { creaturestorage, checkFileType };
