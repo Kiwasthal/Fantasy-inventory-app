@@ -127,7 +127,7 @@ exports.creature_create_post = [
     image: {
       custom: {
         options: (value, { req }) => !!req.file,
-        errorMessage: 'You need to upload a creature image (jpg, png, gif)',
+        errorMessage: 'You need to upload a creature image (jpg, png, svg)',
       },
     },
   }),

@@ -1,9 +1,19 @@
 const Source = require('../models/source');
 const Creature = require('../models/creature');
 const async = require('async');
+const multer = require('multer');
+const { sourcestorage, checkFileType } = require('../utils/multer');
+const { body, checkSchema, validationResult } = require('express-validator');
+
+const upload = multer({
+  storage: sourcestorage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
 
 exports.source_list = (req, res, next) => {
-  Source.find({}, 'name')
+  Source.find({}, 'name filepath')
     .sort({ name: 1 })
     .exec((err, sources_list) => {
       if (err) next(err);
@@ -41,12 +51,54 @@ exports.source_detail = (req, res, next) => {
 };
 
 exports.source_create_get = (req, res, next) => {
-  res.send('Not implemented : Source create Get');
+  res.render('source_form', { title: 'Create Source' });
 };
 
-exports.source_create_post = (req, res, next) => {
-  res.send('Not implemented : Source create Post');
-};
+exports.source_create_post = [
+  upload.single('image'),
+  body('name', 'Source Name is required').trim().isLength({ min: 1 }).escape(),
+  body('description', 'Source Description is required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  checkSchema({
+    image: {
+      custom: {
+        options: (value, { req }) => !!req.file,
+        errorMessage: 'You need to upload a source image (jpg, png, gif)',
+      },
+    },
+  }),
+  (req, res, next) => {
+    let errors = validationResult(req);
+    let source = new Source({
+      name: req.body.name,
+      description: req.body.description,
+      filepath: req.file?.filename,
+    });
+    if (!errors.isEmpty()) {
+      res.render('source_form', {
+        title: 'Create Source',
+        source,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      Source.findOne({
+        name: req.body.name,
+      }).exec((err, found_source) => {
+        if (err) return next(err);
+        if (found_source) res.redirect(found_source.url);
+        else {
+          source.save(err => {
+            if (err) return next(err);
+            res.redirect(source.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 exports.source_delete_get = (req, res, next) => {
   res.send('Not implemented : Source delete Get');
