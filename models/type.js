@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const TypeSchema = new Schema({
   name: { type: String, required: true },
-  description: { type: String },
+  description: { type: String, required: true },
+  filepath: { type: String },
 });
 
 TypeSchema.virtual('url').get(function () {

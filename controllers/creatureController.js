@@ -68,7 +68,32 @@ exports.creature_list = (req, res, next) => {
 };
 
 exports.creature_detail = (req, res, next) => {
-  res.send('Not implemented : Creature detail' + req.params.id);
+  async.parallel(
+    {
+      creature(callback) {
+        Creature.findById(req.params.id)
+          .populate('source')
+          .populate('type')
+          .exec(callback);
+      },
+      creature_instance(callback) {
+        CreatureInstance.find({ creature: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) next(err);
+      if (results.creature == null) {
+        let err = new Error('Creature not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('creature_detail', {
+        title: results.creature.name,
+        creature: results.creature,
+        creature_instances: results.creature_instance,
+      });
+    }
+  );
 };
 
 exports.creature_create_get = (req, res, next) => {

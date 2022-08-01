@@ -21,6 +21,16 @@ const sourcestorage = multer.diskStorage({
   },
 });
 
+const typestorage = multer.diskStorage({
+  destination: './public/uploads/types/',
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + '-' + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
 const checkFileType = (file, cb) => {
   // Allowed ext
   const filetypes = /jpeg|jpg|png|svg/;
@@ -33,4 +43,4 @@ const checkFileType = (file, cb) => {
   else cb('You can only upload images');
 };
 
-module.exports = { creaturestorage, sourcestorage, checkFileType };
+module.exports = { creaturestorage, sourcestorage, typestorage, checkFileType };
