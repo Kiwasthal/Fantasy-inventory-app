@@ -36,7 +36,6 @@ exports.index = (req, res, next) => {
               Creature.aggregate([{ $sample: { size: 3 } }]).exec(cb);
             },
             function (prev, cb) {
-              console.log(prev);
               Creature.populate(prev, { path: 'source type' }, cb);
             },
           ],

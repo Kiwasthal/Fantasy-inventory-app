@@ -6,6 +6,7 @@ const CreatureInstanceSchema = new Schema({
   creature: { type: Schema.Types.ObjectId, ref: 'Creature', required: true },
   name: { type: String, required: true },
   history: { type: String, required: true },
+  filepath: { type: String },
 });
 
 CreatureInstanceSchema.virtual('url').get(function () {

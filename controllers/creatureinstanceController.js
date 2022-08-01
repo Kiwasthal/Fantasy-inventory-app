@@ -1,14 +1,14 @@
 const CreatureInstance = require('../models/creatureinstance');
 const multer = require('multer');
-const { storage, checkFileType } = require('../utils/multer');
+const { creatureinstancestorage, checkFileType } = require('../utils/multer');
+const async = require('async');
 
-//Init upload
 const upload = multer({
-  storage,
+  storage: creatureinstancestorage,
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single('myImage'); //input name! add enctype 'mutipart/form-data' to my form in view
+});
 
 exports.creatureinstance_list = (req, res, next) => {
   CreatureInstance.find()
@@ -23,8 +23,58 @@ exports.creatureinstance_list = (req, res, next) => {
 };
 
 exports.creatureinstance_detail = (req, res, next) => {
-  res.send('Not implemented  : CreatureInstance detail:' + req.params.id);
+  async.parallel(
+    {
+      creatureinstance(callback) {
+        CreatureInstance.findById(req.params.id)
+          .populate('creature')
+          .exec(callback);
+      },
+      display(callback) {
+        async.waterfall(
+          [
+            function (cb) {
+              CreatureInstance.aggregate([{ $sample: { size: 3 } }]).exec(cb);
+            },
+            function (prev, cb) {
+              CreatureInstance.populate(prev, { path: 'creature' }, cb);
+            },
+          ],
+          function (err, results) {
+            callback(err, results);
+          }
+        );
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.creatureinstance == null) {
+        let err = new Error('Creature instance not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('creatureinstance_detail', {
+        title: `${results.creatureinstance.name}`,
+        creatureinstance: results.creatureinstance,
+        instance_list: results.display,
+      });
+    }
+  );
 };
+// CreatureInstance.findById(req.params.id)
+//   .populate('creature')
+//   .exec((err, creatureinstance) => {
+//     if (err) return next(err);
+//     if (creatureinstance == null) {
+//       let err = new Error('Creature instance not found');
+//       err.status = 404;
+//       return next(err);
+//     }
+//     res.render('creatureinstance_detail', {
+//       title: `${creatureinstance.name}`,
+//       creatureinstance,
+//     });
+//   });
 
 exports.creatureinstance_create_get = (req, res, next) => {
   res.send('Not implemented : CreatureInstance create Get');
