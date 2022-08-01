@@ -607,6 +607,10 @@ video {
   grid-column: span 3 / span 3;
 }
 
+.float-left{
+  float: left;
+}
+
 .m-10{
   margin: 2.5rem;
 }
@@ -627,6 +631,11 @@ video {
 .mx-auto{
   margin-left: auto;
   margin-right: auto;
+}
+
+.my-6{
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .mt-6{
@@ -679,6 +688,10 @@ video {
 
 .mt-3{
   margin-top: 0.75rem;
+}
+
+.mt-5{
+  margin-top: 1.25rem;
 }
 
 .block{
@@ -757,6 +770,10 @@ video {
 
 .flex-wrap{
   flex-wrap: wrap;
+}
+
+.items-start{
+  align-items: flex-start;
 }
 
 .items-end{

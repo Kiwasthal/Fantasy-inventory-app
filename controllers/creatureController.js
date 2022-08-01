@@ -3,12 +3,12 @@ const Type = require('../models/type');
 const Source = require('../models/source');
 const CreatureInstance = require('../models/creatureinstance');
 const multer = require('multer');
-const { storage, checkFileType } = require('../utils/multer');
+const { creaturestorage, checkFileType } = require('../utils/multer');
 const { body, checkSchema, validationResult } = require('express-validator');
 const async = require('async');
 //Init upload
 const upload = multer({
-  storage: storage,
+  storage: creaturestorage,
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
