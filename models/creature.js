@@ -13,6 +13,7 @@ const CreatureSchema = new Schema({
   },
   type: { type: Schema.Types.ObjectId, ref: 'Type', required: true },
   source: [{ type: Schema.Types.ObjectId, ref: 'Source', required: true }],
+  filepath: { type: String },
 });
 
 CreatureSchema.virtual('url').get(function () {

@@ -2,8 +2,17 @@ const Creature = require('../models/creature');
 const Type = require('../models/type');
 const Source = require('../models/source');
 const CreatureInstance = require('../models/creatureinstance');
-
+const multer = require('multer');
+const { storage, checkFileType } = require('../utils/multer');
+const { body, checkSchema, validationResult } = require('express-validator');
 const async = require('async');
+//Init upload
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
 
 exports.index = (req, res, next) => {
   async.parallel(
@@ -53,6 +62,7 @@ exports.creature_list = (req, res, next) => {
     .populate('type')
     .populate('source')
     .exec((err, creature_list) => {
+      if (err) next(err);
       res.render('creature_list', { title: 'Creature List', creature_list });
     });
 };
@@ -62,12 +72,110 @@ exports.creature_detail = (req, res, next) => {
 };
 
 exports.creature_create_get = (req, res, next) => {
-  res.send('Not implemented : Creature Get');
+  async.parallel(
+    {
+      types(callback) {
+        Type.find(callback);
+      },
+      sources(callback) {
+        Source.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) next(err);
+      res.render('creature_form', {
+        title: 'Create Creature',
+        sources: results.sources,
+        types: results.types,
+      });
+    }
+  );
 };
 
-exports.creature_create_post = (req, res, next) => {
-  res.send('Not implemented : Creature Post');
-};
+exports.creature_create_post = [
+  upload.single('image'),
+  (req, res, next) => {
+    if (!Array.isArray(req.body.source)) {
+      if (typeof req.body.source === 'undefined') req.body.source = [];
+      else req.body.source[req.body.source];
+    }
+    next();
+  },
+
+  body('name', 'Creature name must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('history', 'History field must be specified')
+    .trim()
+    .isLength({ min: 15 })
+    .withMessage('Include a more detailed history for the creature')
+    .escape(),
+  body('size', 'Creature size must be specified')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('type', "Creature's type must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('source', "Creature's source must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  checkSchema({
+    image: {
+      custom: {
+        options: function ({ req }) {
+          return !!req.file;
+        },
+        errorMessage: 'Please upload a creature image',
+      },
+    },
+  }),
+
+  (req, res, next) => {
+    let errors = validationResult(req);
+
+    let creature = new Creature({
+      name: req.body.name,
+      history: req.body.history,
+      size: req.body.size,
+      type: req.body.type,
+      source: req.body.source,
+      filepath: req.file?.filename,
+    });
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          types(callback) {
+            Type.find(callback);
+          },
+          sources(callback) {
+            Source.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) return next(err);
+
+          res.render('creature_form', {
+            title: 'Create Creature',
+            sources: results.sources,
+            types: results.types,
+            creature,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    } else {
+      creature.save(err => {
+        if (err) return next(err);
+        res.redirect(creature.url);
+      });
+    }
+  },
+];
 
 exports.creature_delete_get = (req, res, next) => {
   res.send('Not implemented : Creature Get');
