@@ -127,11 +127,23 @@ exports.creatureinstance_create_post = [
 ];
 
 exports.creatureinstance_delete_get = (req, res, next) => {
-  res.send('Not implemented : CreatureInstace delete Get');
+  CreatureInstance.findById(req.params.id).exec((err, creatureinstance) => {
+    if (err) return next(err);
+    res.render('creatureinstance_delete', {
+      title: 'Delete Creature Instance',
+      creatureinstance,
+    });
+  });
 };
 
 exports.creatureinstance_delete_post = (req, res, next) => {
-  res.send('Not implemented : CreatureInstance delete Post');
+  CreatureInstance.findByIdAndRemove(
+    req.body.creatureinstanceid,
+    function deleteCreatureInstance(err) {
+      if (err) return next(err);
+      res.redirect('/archieve/creatureinstances');
+    }
+  );
 };
 
 exports.creatureinstance_update_get = (req, res, next) => {

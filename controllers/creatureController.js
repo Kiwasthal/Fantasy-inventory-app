@@ -296,7 +296,6 @@ exports.creature_update_post = [
           : req.file.filename,
       _id: req.params.id,
     });
-
     if (!errors.isEmpty()) {
       async.parallel(
         {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%-include('./partial/head.ejs') %>
+  </head>
+  <body>
+    <%-include('./partial/navbar.ejs') %>
+    <div class="flex">
+      <%-include('./partial/sidenav.ejs') %>
+      <main class="m-10">
+        <header>
+          <h2 class="text-gray-700 text-5xl font-semibold font-main">
+            <%= title %> : <%= creatureinstance.name %>
+          </h2>
+        </header>
+
+        <p class="text-xl mt-2 font-secondary">
+          Do you really want to delete this Souce?
+        </p>
+        <form class="w-full max-w-xl mt-2" method="post" action="">
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <input
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="creatureinstanceid"
+                name="creatureinstanceid"
+                type="hidden"
+                required="true"
+                value="<%= creatureinstance._id  %>"
+              />
+            </div>
+          </div>
+          <button
+            class="bg-gray-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Delete
+          </button>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

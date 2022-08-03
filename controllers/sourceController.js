@@ -143,7 +143,6 @@ exports.source_delete_post = (req, res, next) => {
         });
       } else {
         Source.findByIdAndRemove(req.body.sourceid, function deleteSource(err) {
-          console.log('sourceid', req.body.sourceid);
           if (err) return next(err);
           res.redirect('/archieve/sources');
         });
