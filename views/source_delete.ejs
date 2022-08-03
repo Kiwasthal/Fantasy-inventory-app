@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%-include('./partial/head.ejs') %>
+  </head>
+  <body>
+    <%-include('./partial/navbar.ejs') %>
+    <div class="flex">
+      <%-include('./partial/sidenav.ejs') %>
+      <main class="m-10">
+        <header>
+          <h2 class="text-gray-700 text-5xl font-semibold font-main">
+            <%= title %> : <%= source.name %>
+          </h2>
+        </header>
+        <% if (source_creatures.length) { %>
+        <p class="mt-6 font-secondary text-xl" >
+          <strong >
+            Delete the following creatures before attempting to delete this
+            source.
+          </strong>
+          <h4 class="text-gray-700 text-2xl font-semibold font-main">Creatures :</h4>
+          <div class=" grid lg:grid-cols-3 gap-10">
+           
+            <% source_creatures.forEach( (creature) => { %>
+              <div class="card hover:shadow-lg">
+                <div class="m-4 mb-1 flex justify-between items-end">
+                  <span class="text-lg tracking-wide font-bold font-main"
+                    ><%= creature.name %></span
+                  >
+  
+                  <span class="block text-gray-500 text-sm"
+                    ><%= creature.source[0].name %> - <%= creature.type.name %>
+                  </span>
+                </div>
+                <img
+                  src="/uploads/creatures/<%= creature.filepath %>"
+                  class="w-full h-22 sm:h-48 object-cover"
+                />
+                <a href="<%=creature.url%>">
+                  <button
+                    class="absolute bottom-0 right-0 mr-3 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide"
+                  >
+                    View
+                  </button>
+                </a>
+              </div>
+           <% }) %> 
+            
+          </div>
+        </p>
+        <% } else { %>
+          <p class="text-xl mt-2 font-secondary">
+            Do you really want to delete this Souce?
+          </p>
+          <form
+          class="w-full max-w-xl mt-2"
+          method="post"
+          action=""
+        >
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <input class="appearance-none block w-full bg-gray-200
+              text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3
+              leading-tight focus:outline-none focus:bg-white
+              focus:border-gray-500" id="sourceid" name="sourceid" type="hidden"
+              required="true" value="<%= source._id  %>"
+              />
+            </div>
+          </div>
+          <button
+            class="bg-gray-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Delete
+          </button>
+        </form>
+       <% } %>
+        
+      </main>
+    </div>
+  </body>
+</html>

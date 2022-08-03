@@ -101,11 +101,55 @@ exports.source_create_post = [
 ];
 
 exports.source_delete_get = (req, res, next) => {
-  res.send('Not implemented : Source delete Get');
+  async.parallel(
+    {
+      source(callback) {
+        Source.findById(req.params.id).exec(callback);
+      },
+      source_creatures(callback) {
+        Creature.find({ source: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.source == null) res.redirect('/archieve/sources');
+      res.render('source_delete', {
+        title: 'Delete Source',
+        source: results.source,
+        source_creatures: results.source_creatures,
+      });
+      return;
+    }
+  );
 };
 
 exports.source_delete_post = (req, res, next) => {
-  res.send('Not implemented : Source delete Post');
+  async.parallel(
+    {
+      source(callback) {
+        Source.findById(req.body.sourceid).exec(callback);
+      },
+      source_creatures(callback) {
+        Creature.find({ source: req.body.sourceid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.source_creatures.length > 0) {
+        res.render('source_delete', {
+          title: 'Delete Source',
+          source: results.source,
+          source_creatures: results.source_creatures,
+        });
+      } else {
+        Source.findByIdAndRemove(req.body.sourceid, function deleteSource(err) {
+          console.log('sourceid', req.body.sourceid);
+          if (err) return next(err);
+          res.redirect('/archieve/sources');
+        });
+      }
+    }
+  );
 };
 
 exports.source_update_get = (req, res, next) => {
