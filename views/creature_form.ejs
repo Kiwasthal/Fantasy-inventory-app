@@ -44,6 +44,10 @@
                 name="image"
                 type="file"
               />
+              <% if (typeof creature !== 'undefined') { %>
+                <img src="/uploads/creatures/<%= creature.filepath  %>" alt="">
+                <input type="hidden" name="previmage" id="previmage" value="<%= creature.filepath  %> ">
+              <% } %> 
             </div>
           </div>
           <div class="flex flex-wrap -mx-3 mb-6">
@@ -151,12 +155,24 @@
                   class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="size" name="size"
                 >
-                  <option>Tiny</option>
-                  <option>Small</option>
-                  <option selected="">Medium</option>
-                  <option>Large</option>
-                  <option>Huge</option>
-                  <option>Gargantuan</option>
+                  <% if (typeof creature === 'undefined') { %>
+                    <option>Tiny</option>
+                    <option>Small</option>
+                    <option selected="">Medium</option>
+                    <option>Large</option>
+                    <option>Huge</option>
+                    <option>Gargantuan</option>
+                 <% } else { %>
+                  <% let enumsizes = ['Tiny','Small','Medium','Large','Huge','Gargantuan'] %> 
+                    <%  enumsizes.forEach((size) => { %>
+                      <% if (size !== creature.size) { %>
+                        <option><%= size %></option>
+                     <% } else { %>
+                        <option selected="" ><%= size %></option>
+                     <% } %> 
+                   <% }) %>
+                 <% } %> 
+                 
                 </select>
                 <div
                   class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"

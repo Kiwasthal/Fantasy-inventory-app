@@ -208,9 +208,124 @@ exports.creature_delete_post = (req, res, next) => {
 };
 
 exports.creature_update_get = (req, res, next) => {
-  res.send('Not implemented : Creature update Get');
+  async.parallel(
+    {
+      creature(callback) {
+        Creature.findById(req.params.id)
+          .populate('source')
+          .populate('type')
+          .exec(callback);
+      },
+      sources(callback) {
+        Source.find(callback);
+      },
+      types(callback) {
+        Type.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.creature == null) {
+        let err = new Error('Creature not found');
+        err.status = 404;
+        return next(err);
+      }
+      for (let i = 0; i < results.sources.length; i++) {
+        for (let y = 0; y < results.creature.source.length; y++) {
+          if (
+            results.sources[i]._id.toString() ===
+            results.creature.source[y]._id.toString()
+          )
+            results.sources[i].checked = 'true';
+        }
+      }
+      res.render('creature_form', {
+        title: 'Update Creatures',
+        sources: results.sources,
+        types: results.types,
+        creature: results.creature,
+      });
+    }
+  );
 };
 
-exports.creature_update_post = (req, res, next) => {
-  res.send('Not implemented : Creature update POst');
-};
+exports.creature_update_post = [
+  upload.single('image'),
+  (req, res, next) => {
+    if (!Array.isArray(req.body.source)) {
+      if (typeof req.body.source === 'undefined') req.body.source = [];
+      else req.body.source = [req.body.source];
+    }
+    next();
+  },
+  body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
+  body('name', 'Creature name must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('history', 'History field must be specified')
+    .trim()
+    .isLength({ min: 15 })
+    .withMessage('Include a more detailed history for the creature')
+    .escape(),
+  body('size', 'Creature size must be specified')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('type', "Creature's type must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('source', "Creature's source must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    let creature = new Creature({
+      name: req.body.name,
+      history: req.body.history,
+      source: req.body.source,
+      type: req.body.type,
+      size: req.body.size,
+      filepath:
+        typeof req.file?.filename === 'undefined'
+          ? req.body.previmage
+          : req.file.filename,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          sources(callback) {
+            Source.find(callback);
+          },
+          types(callback) {
+            Type.find(callback);
+          },
+        },
+        (err, results) => {
+          res.render('creature_form', {
+            title: 'Update Creature',
+            sources: results.sources,
+            types: results.types,
+            creature,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    } else {
+      Creature.findByIdAndUpdate(
+        req.params.id,
+        creature,
+        {},
+        function (err, thecreature) {
+          if (err) return next(err);
+          res.redirect(thecreature.url);
+        }
+      );
+    }
+  },
+];
