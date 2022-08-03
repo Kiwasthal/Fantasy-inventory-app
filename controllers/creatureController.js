@@ -6,6 +6,7 @@ const multer = require('multer');
 const { creaturestorage, checkFileType } = require('../utils/multer');
 const { body, checkSchema, validationResult } = require('express-validator');
 const async = require('async');
+const fs = require('fs');
 //Init upload
 const upload = multer({
   storage: creaturestorage,
@@ -295,6 +296,7 @@ exports.creature_update_post = [
           : req.file.filename,
       _id: req.params.id,
     });
+
     if (!errors.isEmpty()) {
       async.parallel(
         {
