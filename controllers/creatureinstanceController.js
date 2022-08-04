@@ -147,9 +147,71 @@ exports.creatureinstance_delete_post = (req, res, next) => {
 };
 
 exports.creatureinstance_update_get = (req, res, next) => {
-  res.send('Not implemented : CreatureInstance update Get');
+  async.parallel(
+    {
+      creatureinstance(callback) {
+        CreatureInstance.findById(req.params.id).exec(callback);
+      },
+      creatures_list(callback) {
+        Creature.find().exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      res.render('creatureinstance_form', {
+        title: 'Update Creature Instance',
+        creatureinstance: results.creatureinstance,
+        creatures_list: results.creatures_list,
+      });
+    }
+  );
 };
 
-exports.creatureinstance_update_post = (req, res, next) => {
-  res.send('Not implemented : CreatureInstance update Post');
-};
+exports.creatureinstance_update_post = [
+  upload.single('image'),
+  body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
+  body('history', 'History field must be specified')
+    .trim()
+    .isLength({ min: 15 })
+    .withMessage('Include a more detailed history for the creature')
+    .escape(),
+  body('creature', "Creature's family must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    let creatureinstance = new CreatureInstance({
+      name: req.body.name,
+      history: req.body.history,
+      creature: req.body.creature,
+      filepath:
+        typeof req.file?.filename === 'undefined'
+          ? req.body.previmage
+          : req.file.filename,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      Creature.find().exec((err, creatures_list) => {
+        if (err) return next(err);
+        res.render('creatureinstance_form', {
+          title: 'Update Creature Instance',
+          creatureinstance,
+          creatures_list,
+          errors: errors.array(),
+        });
+      });
+      return;
+    } else {
+      CreatureInstance.findByIdAndUpdate(
+        req.params.id,
+        creatureinstance,
+        {},
+        function (err, thecreatureinstance) {
+          if (err) return next(err);
+          res.redirect(thecreatureinstance.url);
+        }
+      );
+    }
+  },
+];

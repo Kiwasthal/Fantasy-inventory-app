@@ -103,11 +103,54 @@ exports.type_create_post = [
 ];
 
 exports.type_delete_get = (req, res, next) => {
-  res.send('Not implemented: Type delete Get');
+  async.parallel(
+    {
+      type(callback) {
+        Type.findById(req.params.id).exec(callback);
+      },
+      type_creatures(callback) {
+        Creature.find({ type: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.type == null) res.redirect('/archieve/types');
+      res.render('type_delete', {
+        title: 'Delete Type',
+        type: results.type,
+        type_creatures: results.type_creatures,
+      });
+      return;
+    }
+  );
 };
 
 exports.type_delete__post = (req, res, next) => {
-  res.send('Not implemented: Type delete Post');
+  async.parallel(
+    {
+      type(callback) {
+        Type.findById(req.body.typeid).exec(callback);
+      },
+      type_creatures(callback) {
+        Creature.find({ type: req.body.typeid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.type_creatures.length > 0) {
+        res.render('type_delete', {
+          title: 'Delete Title',
+          type: results.type,
+          type_creatures: results.type_creatures,
+        });
+      } else {
+        Type.findByIdAndRemove(req.body.typeid, function deleteType(err) {
+          if (err) return next(err);
+          res.redirect('/archieve/types');
+        });
+      }
+    }
+  );
 };
 
 exports.type_update_get = (req, res, next) => {

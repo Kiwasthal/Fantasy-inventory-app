@@ -151,9 +151,7 @@ exports.source_delete_post = (req, res, next) => {
   );
 };
 
-exports.source_update_get = (req, res, next) => {
-  res.send('Not implemented : Source update Get');
-};
+exports.source_update_get = (req, res, next) => {};
 
 exports.source_update_post = (req, res, next) => {
   res.send('Not implemented : Source update Post');

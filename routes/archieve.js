@@ -91,7 +91,7 @@ router.get(
 );
 
 router.post(
-  '/cretureinstance/:id/update',
+  '/creatureinstance/:id/update',
   creatureinstanceController.creatureinstance_update_post
 );
 
