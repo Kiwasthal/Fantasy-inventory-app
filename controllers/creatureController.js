@@ -201,11 +201,57 @@ exports.creature_create_post = [
 ];
 
 exports.creature_delete_get = (req, res, next) => {
-  res.send('Not implemented : Creature Get');
+  async.parallel(
+    {
+      creature(callback) {
+        Creature.findById(req.params.id).exec(callback);
+      },
+      creature_creatureinstances(callback) {
+        CreatureInstance.find({ creature: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.creature == null) res.redirect('/archieve/creatures');
+      res.render('creature_delete', {
+        title: 'Delete Creature',
+        creature: results.creature,
+        creature_creatureinstances: results.creature_creatureinstances,
+      });
+      return;
+    }
+  );
 };
 
 exports.creature_delete_post = (req, res, next) => {
-  res.send('Not implemented : Creature Post');
+  async.parallel(
+    {
+      creature(callback) {
+        Creature.findById(req.params.id).exec(callback);
+      },
+      creature_creatureinstances(callback) {
+        CreatureInstance.find({ creature: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) return next(err);
+      if (results.creature_creatureinstances.length > 0) {
+        res.render('creature_delete', {
+          title: 'Delete Creature',
+          creature: results.creature,
+          creature_creatureinstances: results.creature_creatureinstances,
+        });
+      } else {
+        Creature.findByIdAndRemove(
+          req.body.creatureid,
+          function deleteCreature(err) {
+            if (err) return next(err);
+            res.redirect('/archieve/creatures');
+          }
+        );
+      }
+    }
+  );
 };
 
 exports.creature_update_get = (req, res, next) => {

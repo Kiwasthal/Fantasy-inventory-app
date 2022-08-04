@@ -10,34 +10,29 @@
       <main class="m-10">
         <header>
           <h2 class="text-gray-700 text-5xl font-semibold font-main">
-            <%= title %> : <%= source.name %>
+            <%= title %> : <%= creature.name %>
           </h2>
         </header>
-        <% if (source_creatures.length) { %>
+        <% if (creature_creatureinstances.length) { %>
         <p class="mt-6 font-secondary text-xl" >
           <strong >
-            Delete the following creatures before attempting to delete this
-            source.
+            Delete the following creature instances before attempting to delete this creature.
           </strong>
-          <h4 class="text-gray-700 text-2xl font-semibold font-main">Creatures :</h4>
+          <h4 class="text-gray-700 text-2xl font-semibold font-main">Creature Instances:</h4>
           <div class=" grid lg:grid-cols-3 gap-10">
            
-            <% source_creatures.forEach( (creature) => { %>
+            <% creature_creatureinstances.forEach( (instance) => { %>
               <div class="card hover:shadow-lg">
                 <div class="m-4 mb-1 flex justify-between items-end">
                   <span class="text-lg tracking-wide font-bold font-main"
-                    ><%= creature.name %></span
+                    ><%= instance.name %></span
                   >
-  
-                  <span class="block text-gray-500 text-sm"
-                    ><%= creature.source[0].name %> - <%= creature.type.name %>
-                  </span>
                 </div>
                 <img
-                  src="/uploads/creatures/<%= creature.filepath %>"
+                  src="/uploads/creatureinstances/<%= instance.filepath %>"
                   class="w-full h-22 sm:h-48 object-cover"
                 />
-                <a href="<%=creature.url%>">
+                <a href="<%= instance.url%>">
                   <button
                     class="absolute bottom-0 right-0 mr-3 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide"
                   >
@@ -51,7 +46,7 @@
         </p>
         <% } else { %>
           <p class="text-xl mt-2 font-secondary">
-            Do you really want to delete this Souce?
+            Do you really want to delete this Creature?
           </p>
           <form
           class="w-full max-w-xl mt-2"
@@ -63,8 +58,8 @@
               <input class="appearance-none block w-full bg-gray-200
               text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3
               leading-tight focus:outline-none focus:bg-white
-              focus:border-gray-500" id="sourceid" name="sourceid" type="hidden"
-              required="true" value="<%= creatureinstance._id  %>"
+              focus:border-gray-500" id="creatureid" name="creatureid" type="hidden"
+              required="true" value="<%= creature._id  %>"
               />
             </div>  
           </div>
