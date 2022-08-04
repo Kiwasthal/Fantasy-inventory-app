@@ -40,23 +40,25 @@
       </div>
     </div>
     <div class="grid lg:grid-cols-3">
-      <% if (data.display.length > 0) { %>
-        <% data.display.forEach( item => { %>
-          <div class="bg-white rounded overflow-hidden shadow-md relative hover:shadow-lg m-5 mt-0">
-            <div class="flex justify-between items-end" >
-              <span class="font-bold font-secondary text-xl "><%= item.name %> </span>
-              
-              <span class=" font-secondary text-sm "><%= item.source[0].name %> - <%= item.type.name %>  </span>
+      <% if (data.display) { %>
+        <% if (data.display.length > 0) { %>
+          <% data.display.forEach( item => { %>
+            <div class="bg-white rounded overflow-hidden shadow-md relative hover:shadow-lg m-5 mt-0">
+              <div class="flex justify-between items-end" >
+                <span class="font-bold font-secondary text-xl "><%= item.name %> </span>
+                
+                <span class=" font-secondary text-sm "><%= item.source[0].name %> - <%= item.type.name %>  </span>
+              </div>
+              <img
+                  src="/uploads/creatures/<%= item.filepath %>"
+                  class="w-full h-32 sm:h-48 object-cover"
+                />
+                <a href="/archieve/creature/<%=item._id%>">
+                <button class="absolute bottom-0 right-0 mr-2 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide">View</button>
+              </a>
             </div>
-            <img
-                src="/uploads/creatures/<%= item.filepath %>"
-                class="w-full h-32 sm:h-48 object-cover"
-              />
-              <a href="/archieve/creature/<%=item._id%>">
-              <button class="absolute bottom-0 right-0 mr-2 mb-2 bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded font-secondary tracking-wide">View</button>
-            </a>
-          </div>
-       <% }) %> 
+         <% }) %> 
+       <% } %>   
      <% } %> 
     </div>
   </body>
