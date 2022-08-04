@@ -259,7 +259,6 @@ exports.creature_update_post = [
     }
     next();
   },
-  body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
   body('name', 'Creature name must not be empty')
     .trim()
     .isLength({ min: 1 })

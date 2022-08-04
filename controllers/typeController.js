@@ -154,9 +154,49 @@ exports.type_delete__post = (req, res, next) => {
 };
 
 exports.type_update_get = (req, res, next) => {
-  res.send('Not implemented : Type update Get');
+  Type.findById(req.params.id).exec((err, type) => {
+    if (err) return next(err);
+    res.render('type_form', {
+      title: 'Update Title',
+      type,
+    });
+  });
 };
 
-exports.type_update_post = (req, res, next) => {
-  res.send('Not implemented : Type update Post');
-};
+exports.type_update_post = [
+  upload.single('image'),
+  body('name', 'Type Name must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('description', 'Type description must be specified')
+    .trim()
+    .isLength({ min: 15 })
+    .withMessage('Include a more detailed description of this type')
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    let type = new Type({
+      name: req.body.name,
+      description: req.body.description,
+      filepath:
+        typeof req.file?.filename === 'undefined'
+          ? req.body.previmage
+          : req.file.filename,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      res.render('type_form', {
+        title: 'Update Title',
+        type,
+        errors: errors.array(),
+      });
+    } else {
+      Type.findByIdAndUpdate(req.params.id, type, {}, function (err, thetype) {
+        if (err) return next(err);
+        res.redirect(thetype.url);
+      });
+    }
+  },
+];
