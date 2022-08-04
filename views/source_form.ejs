@@ -47,6 +47,15 @@
                 name="image"
                 type="file"
               />
+              <% if (typeof source !== 'undefined') { %>
+              <img src="/uploads/sources/<%= source.filepath  %>" alt="" />
+              <input
+                type="hidden"
+                name="previmage"
+                id="previmage"
+                value="<%= source.filepath  %> "
+              />
+              <% } %>
             </div>
           </div>
           <div class="flex flex-wrap -mx-3 mb-6">
@@ -65,7 +74,7 @@
                 type="text"
                 placeholder="Egyptian mythology is the collection of myths from ancient Egypt, which describe the actions of the Egyptian gods as a means of understanding the world around them. The beliefs that these myths express are an important part of ancient Egyptian religion. Myths appear frequently in Egyptian writings and art, particularly in short stories and in religious material such as hymns, ritual texts, funerary texts, and temple decoration. These sources rarely contain a complete account of a myth and often describe only brief fragments."
               >
-<%= (typeof creature === 'undefined') ? "" : source.description %></textarea
+<%= (typeof source === 'undefined') ? "" : source.description %></textarea
               >
             </div>
           </div>

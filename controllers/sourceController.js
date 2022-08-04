@@ -151,8 +151,55 @@ exports.source_delete_post = (req, res, next) => {
   );
 };
 
-exports.source_update_get = (req, res, next) => {};
-
-exports.source_update_post = (req, res, next) => {
-  res.send('Not implemented : Source update Post');
+exports.source_update_get = (req, res, next) => {
+  Source.findById(req.params.id).exec((err, source) => {
+    if (err) return next(err);
+    res.render('source_form', {
+      title: 'Update Source',
+      source,
+    });
+  });
 };
+
+exports.source_update_post = [
+  upload.single('image'),
+  body('name', 'Type Name must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('description', 'Type description must be specified')
+    .trim()
+    .isLength({ min: 15 })
+    .withMessage('Include a more detailed description of this type')
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    let source = new Source({
+      name: req.body.name,
+      description: req.body.description,
+      filepath:
+        typeof req.file?.filename === 'undefined'
+          ? req.body.previmage
+          : req.file.filename,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      res.render('type_form', {
+        title: 'Update Title',
+        source,
+        errors: errors.array(),
+      });
+    } else {
+      Source.findByIdAndUpdate(
+        req.params.id,
+        source,
+        {},
+        function (err, thesource) {
+          if (err) return next(err);
+          res.redirect(thesource.url);
+        }
+      );
+    }
+  },
+];
