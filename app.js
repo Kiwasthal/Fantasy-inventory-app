@@ -13,7 +13,9 @@ const helmet = require('helmet');
 
 require('dotenv').config();
 
-const mongoDB = `mongodb+srv://steerpike:${process.env.MONGODB_DEVPASS}@cluster0.zv2uh.mongodb.net/?retryWrites=true&w=majority`;
+const mongoDB =
+  process.env.MONGODB_URI ||
+  `mongodb+srv://steerpike:${process.env.MONGODB_DEVPASS}@cluster0.zv2uh.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.connect(
   mongoDB,
   { useNewUrlParser: true, useUnifiedTopology: true },
